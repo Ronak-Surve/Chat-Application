@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Socket.IO chat</title>
+
+  </head>
+  <body>
+
+    <h1>Welcome to the Chat App! </h1>
+
+        <input type="text" id="inputText" placeholder="type message...">    
+        <button type="submit" id="sendBtn"> Send </button>
+        
+    <!-- <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form> -->
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        //execute the function when client connects
+        socket.on("connect", () => console.log("connected to Client") );
+
+        const sendBtn = document.getElementById("sendBtn");
+        const inputText = document.getElementById("inputText");
+
+        sendBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (inputText.value) {
+            socket.emit('chat-message', inputText.value);
+            inputText.value = '';
+            }
+        });        
+
+        socket.on("user-message", (msg) => {
+            console.log("Message by user : ",msg);
+        });
+
+        //execute the callback after client disconnects
+        socket.on("disconnect", () => console.log("Client disconnected") );
+
+    </script>
+  </body>
+</html>
